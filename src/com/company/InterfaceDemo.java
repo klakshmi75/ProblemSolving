@@ -2,15 +2,12 @@ package com.company;
 interface Interface {
     int i = 0;
     static void display() {
+        // can not assign a value to a final variable
+        // i++;
         System.out.println("static interface method");
     };
 }
-abstract class AbstractClass {
 
-}
-class ExtendAbstract extends AbstractClass {
-
-}
 class ImplementInterface implements Interface {
     public ImplementInterface() {
     }
@@ -18,10 +15,8 @@ class ImplementInterface implements Interface {
         System.out.println("i=" + i);
     }
 }
-public class AbstractVsInterfaceDemo {
+public class InterfaceDemo {
     public static void main(String rags[]) {
-        AbstractClass obj = new ExtendAbstract();
-        System.out.println(obj);
         ImplementInterface i = new ImplementInterface();
         i.display();
     }

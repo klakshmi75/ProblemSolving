@@ -2,7 +2,25 @@ package com.company;
 
 import java.io.*;
 import java.util.Scanner;
+/**** Observations ***
+        If superclass is serializable then subclass is automatically serializable
+        If a superclass is not serializable then subclass can still be serialized
+Serialization: At the time of serialization, if any instance variable is inheriting from non-serializable
+        superclass, then JVM ignores original value of that instance variable and save default value
+        to the file.
+De- Serialization: At the time of de-serialization, if any non-serializable superclass is present,
+        then JVM will execute instance control flow in the superclass. To execute instance control
+        flow in a class, JVM will always invoke default(no-arg) constructor of that class. So every non-serializable superclass must necessarily contain default constructor, otherwise we will get runtime-exception.
+ If the superclass is serializable but we don’t want the subclass to be serialized : There is no direct
+ way to prevent subclass from serialization in java. One possible way by which a programmer can achieve
+ this is by implementing the writeObject() and readObject() methods in the subclass and needs
+ to throw NotSerializableException from these methods.
 
+ *** You can not have default constructor for child if parent has not default constructor
+
+ default constructor is mandatory to be able to implement externalizable
+ it is not required to have default constructor to implement serializable.
+ If parent implements serializable child can be serializable automatically. Child need not implement Serializable explicitly*/
 class Parent implements Serializable {
     protected int p;
     public Parent() {
@@ -46,13 +64,11 @@ class Child extends Parent implements Externalizable {
         t = is.readInt();
         is.defaultReadObject();
     }
-    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(c);
         out.writeInt(t);
     }
 
-    @Override
     public void readExternal(ObjectInput in)
             throws IOException, ClassNotFoundException {
         this.c = in.readInt();
@@ -65,9 +81,6 @@ public class SerializableDemo {
     public static void main(String args[]) throws Exception{
         serializeParent();
         serializeChild();
-//        Integer i = 127;
-//        Integer j = 127;
-//        System.out.println(i == j);
     }
 
     public static void serializeParent() throws Exception{
